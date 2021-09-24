@@ -5,6 +5,8 @@ import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
+// https://cs.boisestate.edu/~scutchin/cs402/codesnips/RecycleView.html
+
 // TODO: refactor project to not be about coffee or koffee
 
 // TODO: add checkmark buttons to coffee_item_view and add text into checkmark items
