@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">RecycleView</string>
+    <string name="newListItemDescription">Button to create a new list item</string>
 </resources>
