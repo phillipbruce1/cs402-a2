@@ -1,8 +1,12 @@
 package com.example.recycleview
 
+import android.graphics.Paint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.CheckBox
+import android.widget.RelativeLayout
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -13,17 +17,22 @@ import androidx.recyclerview.widget.RecyclerView
 // DONE: add checkmark buttons to coffee_item_view and add text into checkmark items
 // use click listeners
 
-// TODO: edit text?
+// DONE: edit text?
 // https://androidessence.com/how-to-build-a-todo-list-in-kotlin-part-2-recyclerview
 
-// TODO: plus button in top or bottom right for add
+// DONE: checking item crosses it out and moves it to bottom of list
 
-// TODO: on long press, show pop-up dialogue to modify (join) or delete item
-// concat list items with commas
+// TODO: save new text after being added
+
+// DONE: plus button in top or bottom right for add
+
+// TODO: on long press, show pop-up dialogue to join, split, or delete item
+// concat and split list items via commas
 // https://www.geeksforgeeks.org/how-to-detect-long-press-in-android/
 class MainActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView;
-    private val itemList = arrayListOf<String>();
+    private val itemList = arrayListOf<Task>();
+
     // insert adapter here
     // NOTE: every recycle view requires an adapter
     private val adapter: ListAdapter = ListAdapter(this, itemList);
@@ -36,14 +45,49 @@ class MainActivity : AppCompatActivity() {
         recyclerView = findViewById<RecyclerView>(R.id.recycler_view);
         recyclerView.layoutManager = LinearLayoutManager(this);
 
-        itemList.add("TODO");
-        adapter.notifyItemInserted(itemList.size - 1);
-
         recyclerView.adapter = adapter;
     }
 
+    /**
+     * Generates a unique id to link list items in the arrayList and within the UI
+     */
+    private fun generateTag(): String {
+        return System.currentTimeMillis().toString();
+    }
+
     fun onAddListItem(view: View) {
-        itemList.add("");
-        adapter.notifyItemInserted(itemList.size - 1);
+        itemList.add(0, Task(generateTag()));
+        adapter.notifyItemInserted(0);
+    }
+
+    /**
+     * Reflects checkbox actions in itemList and moves list entry accordingly
+     */
+    fun onPressCheckbox(view: View) {
+        // get the text box
+        if (view is CheckBox) {
+            val parent = view.parent;
+            if (parent is View) {
+                val textBox = parent.findViewById<TextView>(R.id.itemText);
+                // update itemList
+                val i = itemList.indexOf(itemList.find { it.tag == textBox.tag })
+                itemList[i].completed = view.isChecked;
+                if (view.isChecked) {
+                    // cross out text
+                    textBox.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG;
+                    // move Task to bottom of the list
+                    val item = itemList.removeAt(i);
+                    itemList.add(item);
+                    adapter.notifyItemMoved(i, itemList.size - 1);
+                } else {
+                    // remove text strikethrough
+                    textBox.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG.inv();
+                    // move Task to top of list
+                    val item = itemList.removeAt(i);
+                    itemList.add(0, item);
+                    adapter.notifyItemMoved(i, 0);
+                }
+            }
+        }
     }
 }

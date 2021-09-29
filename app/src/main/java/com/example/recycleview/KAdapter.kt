@@ -8,7 +8,7 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class ListAdapter(context: Context, private var itemList: ArrayList<String>) :
+class ListAdapter(context: Context, private var itemList: ArrayList<Task>) :
     RecyclerView.Adapter<ListAdapter.ListItemHolder>() {
 
 
@@ -27,13 +27,13 @@ class ListAdapter(context: Context, private var itemList: ArrayList<String>) :
     override fun onBindViewHolder(holder: ListItemHolder, position: Int) {
         val item = itemList[position]
         holder.apply {
-            itemView.findViewById<TextView>(R.id.textView).apply {
-                text = item;
+            itemView.findViewById<TextView>(R.id.itemText).apply {
+                tag = item.tag;
             };
         };
     }
 
     class ListItemHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val titleTextView: TextView = view.findViewById<RelativeLayout>(R.id.list_item).findViewById<TextView>(R.id.textView);
+        val titleTextView: TextView = view.findViewById<RelativeLayout>(R.id.list_item).findViewById<TextView>(R.id.itemText);
     }
 }
