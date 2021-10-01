@@ -27,6 +27,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="false"
         android:layout_toEndOf="@id/checkBox"
+        android:editable="true"
         android:importantForAutofill="no"
         android:inputType="text"
         android:longClickable="true"

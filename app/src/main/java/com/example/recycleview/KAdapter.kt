@@ -1,6 +1,8 @@
 package com.example.recycleview
 
 import android.content.Context
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView
 
 class ListAdapter(context: Context, private var itemList: ArrayList<Task>) :
     RecyclerView.Adapter<ListAdapter.ListItemHolder>() {
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int)
             : ListAdapter.ListItemHolder {
@@ -33,7 +34,8 @@ class ListAdapter(context: Context, private var itemList: ArrayList<Task>) :
         };
     }
 
-    class ListItemHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val titleTextView: TextView = view.findViewById<RelativeLayout>(R.id.list_item).findViewById<TextView>(R.id.itemText);
+    class ListItemHolder(private val view: View) : RecyclerView.ViewHolder(view) {
+        val titleTextView: TextView =
+            view.findViewById<RelativeLayout>(R.id.list_item).findViewById<TextView>(R.id.itemText);
     }
 }
