@@ -3,14 +3,17 @@ package com.example.recycleview
 import android.graphics.Paint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
+import android.view.ContextMenu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
+import android.widget.AdapterView
 import android.widget.CheckBox
-import android.widget.EditText
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 // https://cs.boisestate.edu/~scutchin/cs402/codesnips/RecycleView.html
 
@@ -47,8 +50,35 @@ class MainActivity : AppCompatActivity() {
         recyclerView = findViewById<RecyclerView>(R.id.recycler_view);
         recyclerView.layoutManager = LinearLayoutManager(this);
 
+        val menuButton: FloatingActionButton = recyclerView.findViewById(R.id.floatingMenuButton);
+        registerForContextMenu(menuButton);
+
         recyclerView.adapter = adapter;
     }
+
+    override fun onCreateContextMenu(
+        menu: ContextMenu?,
+        v: View?,
+        menuInfo: ContextMenu.ContextMenuInfo?
+    ) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        val inflater: MenuInflater = menuInflater;
+        inflater.inflate(R.menu.floating_menu, menu);
+    }
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        val info = item.menuInfo as AdapterView.AdapterContextMenuInfo
+        return when (item.itemId) {
+            R.id.edit -> {
+                true
+            }
+            R.id.delete -> {
+                true
+            }
+            else -> super.onContextItemSelected(item)
+        }
+    }
+
 
     /**
      * Generates a unique id to link list items in the arrayList and within the UI
@@ -60,6 +90,16 @@ class MainActivity : AppCompatActivity() {
     fun onAddListItem(view: View) {
         itemList.add(0, Task(generateTag()));
         adapter.notifyItemInserted(0);
+    }
+
+
+    fun onPressOverflowMenu(view: View?) {
+        AlertDialog.Builder(this@MainActivity)
+            .setTitle("Hello")
+            .setMessage("You clicked the button. Good job!")
+            .setNegativeButton("Thanks!", null)
+            .setPositiveButton("Split", null)
+            .show()
     }
 
     /**

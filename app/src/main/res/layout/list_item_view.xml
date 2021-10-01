@@ -4,10 +4,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/list_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp"
-    android:id="@+id/list_item">
+    android:padding="8dp">
 
     <CheckBox
         android:id="@+id/checkBox"
@@ -23,15 +23,30 @@
         android:id="@+id/itemText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="false"
         android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
+        android:layout_alignParentEnd="false"
         android:layout_alignParentBottom="false"
+        android:layout_toStartOf="@id/floatingMenuButton"
         android:layout_toEndOf="@id/checkBox"
-        android:editable="true"
         android:importantForAutofill="no"
         android:inputType="text"
         android:longClickable="true"
         android:minHeight="48dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         tools:text="Enter a new todo item" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingMenuButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="false"
+        android:clickable="true"
+        android:contentDescription="@string/overflow_menu_icon"
+        app:srcCompat="@android:drawable/ic_menu_more"
+        android:focusable="true" />
+
 </RelativeLayout>
