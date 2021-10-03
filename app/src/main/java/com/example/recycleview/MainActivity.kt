@@ -1,5 +1,6 @@
 package com.example.recycleview
 
+import android.graphics.Color
 import android.graphics.Paint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -27,13 +28,13 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 // DONE: checking item crosses it out and moves it to bottom of list
 
-// TODO: save new text after being added
+// DONE: save new text after being added
 
 // DONE: plus button in top or bottom right for add
 
-// TODO: on long press, show pop-up dialogue to join, split, or delete item
+// TODO: add toolbar menu to join, split, or delete item
 // concat and split list items via commas
-// https://www.geeksforgeeks.org/how-to-detect-long-press-in-android/
+
 class MainActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView;
     private val itemList = arrayListOf<Task>();
@@ -50,33 +51,7 @@ class MainActivity : AppCompatActivity() {
         recyclerView = findViewById<RecyclerView>(R.id.recycler_view);
         recyclerView.layoutManager = LinearLayoutManager(this);
 
-        val menuButton: FloatingActionButton = recyclerView.findViewById(R.id.floatingMenuButton);
-        registerForContextMenu(menuButton);
-
         recyclerView.adapter = adapter;
-    }
-
-    override fun onCreateContextMenu(
-        menu: ContextMenu?,
-        v: View?,
-        menuInfo: ContextMenu.ContextMenuInfo?
-    ) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        val inflater: MenuInflater = menuInflater;
-        inflater.inflate(R.menu.floating_menu, menu);
-    }
-
-    override fun onContextItemSelected(item: MenuItem): Boolean {
-        val info = item.menuInfo as AdapterView.AdapterContextMenuInfo
-        return when (item.itemId) {
-            R.id.edit -> {
-                true
-            }
-            R.id.delete -> {
-                true
-            }
-            else -> super.onContextItemSelected(item)
-        }
     }
 
 
@@ -90,16 +65,6 @@ class MainActivity : AppCompatActivity() {
     fun onAddListItem(view: View) {
         itemList.add(0, Task(generateTag()));
         adapter.notifyItemInserted(0);
-    }
-
-
-    fun onPressOverflowMenu(view: View?) {
-        AlertDialog.Builder(this@MainActivity)
-            .setTitle("Hello")
-            .setMessage("You clicked the button. Good job!")
-            .setNegativeButton("Thanks!", null)
-            .setPositiveButton("Split", null)
-            .show()
     }
 
     /**

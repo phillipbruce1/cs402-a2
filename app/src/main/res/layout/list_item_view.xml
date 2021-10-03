@@ -25,9 +25,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="false"
         android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="false"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="false"
-        android:layout_toStartOf="@id/floatingMenuButton"
         android:layout_toEndOf="@id/checkBox"
         android:importantForAutofill="no"
         android:inputType="text"
@@ -35,18 +34,5 @@
         android:minHeight="48dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         tools:text="Enter a new todo item" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingMenuButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="false"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="false"
-        android:clickable="true"
-        android:contentDescription="@string/overflow_menu_icon"
-        app:srcCompat="@android:drawable/ic_menu_more"
-        android:focusable="true" />
 
 </RelativeLayout>
