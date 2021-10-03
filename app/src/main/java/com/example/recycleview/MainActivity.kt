@@ -52,6 +52,8 @@ class MainActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this);
 
         recyclerView.adapter = adapter;
+
+        // TODO: recyclerView.getChildAt(int) or recyclerView[int] can be used to get corresponding view to select or deselect all items. use position of item in itemList
     }
 
 
