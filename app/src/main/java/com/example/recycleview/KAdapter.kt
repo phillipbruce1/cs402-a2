@@ -9,9 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
+import org.w3c.dom.Text
 
-class ListAdapter(context: Context, private var itemList: ArrayList<Task>) :
-    RecyclerView.Adapter<ListAdapter.ListItemHolder>(), View.OnLongClickListener, TextWatcher {
+class ListAdapter(context: Context, private val itemList: ArrayList<Task>) :
+    RecyclerView.Adapter<ListAdapter.ListItemHolder>(), View.OnLongClickListener {
+    private var tag: String = "";
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int)
             : ListAdapter.ListItemHolder {
@@ -19,8 +21,9 @@ class ListAdapter(context: Context, private var itemList: ArrayList<Task>) :
             .inflate(R.layout.list_item_view, parent, false)
         val checkbox = view.findViewById<CheckBox>(R.id.checkBox);
         checkbox.setOnLongClickListener(this);
-        view.findViewById<EditText>(R.id.itemText).addTextChangedListener(this);
-        return ListItemHolder(view)
+        val holder: ListItemHolder = ListItemHolder(view, itemList);
+        view.findViewById<EditText>(R.id.itemText).addTextChangedListener(holder);
+        return holder;
     }
 
     override fun getItemCount() = itemList.size
@@ -33,8 +36,10 @@ class ListAdapter(context: Context, private var itemList: ArrayList<Task>) :
         holder.apply {
             itemView.findViewById<TextView>(R.id.itemText).apply {
                 tag = item.tag;
+                text = item.text;
             };
         };
+        holder.tag = item.tag;
     }
 
     override fun onLongClick(view: View): Boolean {
@@ -54,20 +59,19 @@ class ListAdapter(context: Context, private var itemList: ArrayList<Task>) :
         return true;
     }
 
-    class ListItemHolder(private val view: View) : RecyclerView.ViewHolder(view) {
+    class ListItemHolder(private val view: View, private val itemList: ArrayList<Task>) : RecyclerView.ViewHolder(view), TextWatcher {
+        var tag: String = "";
         val titleTextView: TextView =
             view.findViewById<RelativeLayout>(R.id.list_item).findViewById<TextView>(R.id.itemText);
-    }
 
-    override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-    }
+        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+        }
 
-    override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-    }
+        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            itemList.find { it.tag == tag }?.text = p0.toString();
+        }
 
-    override fun afterTextChanged(p0: Editable?) {
-        if (p0 !is EditText)
-            return;
-        itemList.find { it.tag == p0.tag }?.text = p0.text.toString();
+        override fun afterTextChanged(p0: Editable?) {
+        }
     }
 }

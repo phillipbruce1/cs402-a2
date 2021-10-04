@@ -4,17 +4,12 @@ import android.graphics.Color
 import android.graphics.Paint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.ContextMenu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
-import android.widget.AdapterView
+import android.view.*
 import android.widget.CheckBox
 import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
+import androidx.core.view.forEach
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 // https://cs.boisestate.edu/~scutchin/cs402/codesnips/RecycleView.html
 
@@ -56,6 +51,65 @@ class MainActivity : AppCompatActivity() {
         // TODO: recyclerView.getChildAt(int) or recyclerView[int] can be used to get corresponding view to select or deselect all items. use position of item in itemList
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater: MenuInflater = menuInflater;
+        inflater.inflate(R.menu.floating_menu, menu);
+        return true;
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.split -> {
+                true;
+            }
+            R.id.join -> {
+                join();
+            }
+            R.id.remove -> {
+                true;
+            }
+            R.id.select_all -> {
+                selectAll();
+            }
+            R.id.deselect_all -> {
+                deselectAll();
+            }
+            else -> false;
+        }
+    }
+
+    private fun join(): Boolean {
+        if (itemList.count { it.selected } <= 1)
+            return deselectAll();
+        val joinedTask: StringBuilder = StringBuilder();
+        var i: Int = 0;
+        while (i < itemList.size) {
+            if (itemList[i].selected) {
+                joinedTask.append(itemList[i].text + ", ")
+                itemList.removeAt(i);
+                recyclerView.removeViewAt(i);
+                adapter.notifyItemRemoved(i);
+            } else {
+                i++;
+            }
+        }
+        joinedTask.delete(joinedTask.length - 2, joinedTask.length);
+        itemList.add(0, Task(generateTag(), joinedTask.toString()));
+        adapter.notifyItemInserted(0);
+        return true;
+    }
+
+    private fun deselectAll(): Boolean {
+        itemList.forEach { it.selected = false };
+        recyclerView.forEach { it.setBackgroundColor(Color.parseColor("#ffffff")) };
+        return true;
+    }
+
+    private fun selectAll(): Boolean {
+        itemList.forEach { it.selected = true };
+        recyclerView.forEach { it.setBackgroundColor(Color.parseColor("#58bce8")) };
+        return true;
+    }
 
     /**
      * Generates a unique id to link list items in the arrayList and within the UI
