@@ -60,13 +60,13 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.split -> {
-                true;
+                split();
             }
             R.id.join -> {
                 join();
             }
             R.id.remove -> {
-                true;
+                remove();
             }
             R.id.select_all -> {
                 selectAll();
@@ -76,6 +76,43 @@ class MainActivity : AppCompatActivity() {
             }
             else -> false;
         }
+    }
+
+    private fun split(): Boolean {
+        if (itemList.count() == 0)
+            return false;
+        var i: Int = 0;
+        val splitTasks = arrayListOf<Task>();
+        while (i < itemList.size) {
+            if (itemList[i].selected && itemList[i].text.contains(',')) {
+                itemList[i].text.split(", ")
+                    .forEach { splitTasks.add(Task(generateTag(), it.trim())) };
+                itemList.removeAt(i);
+                recyclerView.removeViewAt(i);
+                adapter.notifyItemRemoved(i);
+            } else {
+                i++;
+            }
+        }
+        itemList.addAll(0, splitTasks);
+        adapter.notifyItemRangeInserted(0, splitTasks.size);
+        return deselectAll();
+    }
+
+    private fun remove(): Boolean {
+        if (itemList.count() == 0)
+            return false;
+        var i: Int = 0;
+        while (i < itemList.size) {
+            if (itemList[i].selected) {
+                itemList.removeAt(i);
+                recyclerView.removeViewAt(i);
+                adapter.notifyItemRemoved(i);
+            } else {
+                i++;
+            }
+        }
+        return deselectAll();
     }
 
     private fun join(): Boolean {
@@ -96,7 +133,7 @@ class MainActivity : AppCompatActivity() {
         joinedTask.delete(joinedTask.length - 2, joinedTask.length);
         itemList.add(0, Task(generateTag(), joinedTask.toString()));
         adapter.notifyItemInserted(0);
-        return true;
+        return deselectAll();
     }
 
     private fun deselectAll(): Boolean {
